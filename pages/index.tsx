@@ -1,14 +1,14 @@
+import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import Link from "next/link";
 import Head from "next/head";
-import Image from "next/image";
-import React from "react";
-import { signIn, signOut, useSession } from "next-auth/client";
+import { signIn, signOut, useSession } from "next-auth/react";
 import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
-    const [session, loading] = useSession();
-
+    const { data: session, status } = useSession();
+    const loading = status === "loading";
+    const [content, setContent] = useState();
 
     return (
         <div className={styles.container}>
@@ -22,22 +22,34 @@ const Home: NextPage = () => {
             </Head>
 
             <main className={styles.main}>
-				{!session &&  (
-					<>
-					Not Signed In <br />
-					<button onClick={signIn}>Sign In</button>
-					</>
-				)}
-				{session && (
-					<>
-					Signed In as {session.user.email} <br />
-					<div>You can now access secret pages</div>
-					<button>
-						<Link href='/secret'>To the secret</Link>
-					</button>
-					<button onClick={signOut}>Sign Out</button>
-					</>
-				)}
+                {!session && (
+                    <>
+                        Not Signed In <br />
+                        <button
+                            onClick={() => {
+                                signIn();
+                            }}
+                        >
+                            Sign In
+                        </button>
+                    </>
+                )}
+                {session && (
+                    <>
+                        Signed In as {session.user?.email} <br />
+                        <div>You can now access secret pages</div>
+                        <button>
+                            <Link href="/secret">To the secret</Link>
+                        </button>
+                        <button
+                            onClick={() => {
+                                signOut();
+                            }}
+                        >
+                            Sign Out
+                        </button>
+                    </>
+                )}
             </main>
         </div>
     );

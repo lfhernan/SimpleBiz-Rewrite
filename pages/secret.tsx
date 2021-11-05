@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 
 export default function Secret() {
-    const [session, loading] = useSession();
-    const [content, setContent] = useState();
+
+	const { data: session, status } = useSession()
+	const loading = status === 'loading'
+  	const [ content , setContent ] = useState()
 
     useEffect(() => {
         const fetchData = async () => {
