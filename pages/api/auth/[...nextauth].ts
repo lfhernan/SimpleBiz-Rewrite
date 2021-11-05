@@ -21,32 +21,8 @@ const options = {
                 },
             },
             from: process.env.EMAIL_FROM,
-        }),
-        CredentialsProvider({
-            name: "Credentials",
-            credentials: {
-                username: {
-                    label: "Email",
-                    type: "email",
-                    placeholder: "jsmith@email.com",
-                },
-                password: { label: "Password", type: "password" },
-            },
-            async authorize(credentials, req) {
-                const user = await axios.post('localhost:3000/api/signon', credentials);
-                return user;
-            },
-        }),
+        })
     ],
-    session: {
-        jwt: true,
-    },
-    secret: process.env.SECRET,
-    jwt: {
-        secret: process.env.SECRET,
-        encryption: true,
-    },
-    debugger: true,
 };
 
 export default (req: NextApiRequest, res: NextApiResponse) =>
